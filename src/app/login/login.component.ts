@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
 
     this.authentificationService.onLogin(this.loginUser)
       .then(responseAuthentification => {
-        this.router.navigate(["registrer"]);
+        this.router.navigate(["crudProduct"]);
       }).catch(error => {
         console.log(error);
       });
