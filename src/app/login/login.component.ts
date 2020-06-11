@@ -1,6 +1,8 @@
+import { AuthentificationService } from 'src/services/authentification/authentification.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { IUser } from 'src/modals/iuser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,11 @@ export class LoginComponent implements OnInit {
   // interface call
   loginUser:IUser;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder, 
+    private router:Router,
+    private authentificationService: AuthentificationService
+    ) {
     this.loginForm = this.formBuilder.group({
       email: [null, [Validators.required,Validators.email]],
       password: [null,[Validators.required,Validators.minLength(8)]]
@@ -34,6 +40,18 @@ export class LoginComponent implements OnInit {
 
   onSubmit(){
 
+    this.loginUser = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password
+    }
+
+    this.authentificationService.onLogin(this.loginUser)
+      .then(responseAuthentification => {
+        this.router.navigate(["registrer"]);
+      }).catch(error => {
+        console.log(error);
+      });
   }
 
 }
+
